@@ -1,45 +1,37 @@
-Feature:Login using OTP flow
-Scenario: login with valid OTP
-Given: User clicks on sign up button
-And: User enter his phone number
-And: click on the "generate OTP" button
-But: User not receives the OTP
-And: User click on the "resend OTP" button
-And: User receive the OTP on phone number
-And: User enter the same OTP
-And: click on the "submit" button
-Then: User should be able to login to the application
+Feature: Authentication
 
-Scenario: login with valid OTP
-Given: User clicks on sign up button
-And: User enter his phone number
-And: click on the "generate OTP" button
-when: User receives the OTP
-But: User enter invalid OTP
-Then: User get invalid OTP error message with "resend OTP" button
-And: User click on the "resend OTP" button
-And: User receive the OTP on phone number
-And: User enter the same OTP
-Then: User should be able to login to the application
-
-
-Given: User Click on sign up button
-And: User enter his invalid phone number
-And: click on the "generate OTP" button
-Then: User should not be able to login to the application
-
-
-Given: User Click on sign up button
-And: User click on the "generate OTP" button
-Then: User get message "you need to first enter phone number"
-
-Example scenario:
-
-Feature: Testing login feature for application using OTP
-Scenario: login with valid OTP
-Given: User clicks on sign up button
+Scenario: Login with valid OTP
+Given: User is in Login page
 And: User enters his phone number
-And: clicks on the "generate OTP" button
-When: User receives the OTP
-And: User enters the same OTP
-Then: User should be able to login to the application.
+And: User enters correct OTP
+When: User clicks on the "Submit" button
+Then: User should be able to login to the application
+
+Scenario: Login with Invalid OTP
+Given: User is in Login page
+And: User enters his phone number
+And: User enters Incorrect OTP
+When: User clicks on the "Submit" button
+Then: User should not be able to login to the application
+And User should see the error "Invalid OTP"
+
+Scenario: Sign with New Phone Number
+Given: User is in Login page
+And: User does not have any account in the application
+And: User enters his phone number
+And: User enters correct OTP
+When: User clicks on the "Submit" button
+Then: User Account should be created in the application
+And User should be able to login to the application
+
+Scenario: User should be able to use Resend OTP option
+Given User is in Login Page
+And User enters his phone Number
+And User enters Incorrect OTP
+When User clicks on the "Submit" button
+Then User should not be able to login
+And "Resend OTP" should be enabled
+When User clicks on "Resend OTP" button
+Then User should get a new OTP
+When User enters the new correct OTP
+Then User should be able to Login
